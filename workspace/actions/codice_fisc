@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/qr.png
+----
+TEXT
+<*,*,it,*>: Scansiona il tuo codice QR identificativo
+<*,*,en,*>: Scan your identification QR Code
+----
+TTS
+<*,*,it,*>: Scansiona il tuo codice QR identificativo
+<*,*,en,*>: Scan your identification QR Code
+----

@@ -1,0 +1,26 @@
+IMAGE
+<*,*,*,*>:  img/img1.png
+----
+TEXT
+<*,*,it,*>: Dimmi cosa vuoi fare
+<*,*,en,*>: Tell me what you have to do
+----
+TTS
+<*,*,it,*>: Dimmi cosa vuoi fare
+<*,*,en,*>: Tell me what you have to do 
+----
+BUTTONS
+book
+<*,*,it,*>: Prenotare
+<*,*,en,*>: Book
+examination
+<*,*,it,*>: Visita medica
+<*,*,en,*>: Examination
+info
+<*,*,it,*>: Info
+<*,*,en,*>: Info
+----
+ASR
+<*,*,it,*>: { 'book': ['prenota','prenotare'],  'examination': ['visita medica', 'appuntamento'], 'info': ['info', 'informazioni']}
+<*,*,en,*>: { 'book': ['book','book a visit'],  'examination': ['medical examination', 'appointment'], 'info': ['info', 'information'] }
+----

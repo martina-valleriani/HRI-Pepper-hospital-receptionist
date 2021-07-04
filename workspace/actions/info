@@ -1,0 +1,19 @@
+IMAGE
+<*,*,*,*>:  img/info.png
+----
+TEXT
+<*,*,it,*>: Di che informazione hai bisogno?
+<*,*,en,*>: Which kind of information you need?
+----
+TTS
+<*,*,it,*>: Di che informazione hai bisogno?
+<*,*,en,*>: Which kind of information you need? 
+----
+BUTTONS
+payment
+<*,*,it,*>: Pagamento
+<*,*,en,*>: Payment
+toilet
+<*,*,it,*>: Bagno
+<*,*,en,*>: Toilet
+----

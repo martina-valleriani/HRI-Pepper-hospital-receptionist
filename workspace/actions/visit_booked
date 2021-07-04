@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/visit_confirmed.png
+----
+TEXT
+<*,*,it,*>: Appuntamento correttamente registrato.
+<*,*,en,*>: Appointment correctly saved.
+----
+TTS
+<*,*,it,*>: Appuntamento correttamente registrato.
+<*,*,en,*>: Appointment correctly saved.
+----

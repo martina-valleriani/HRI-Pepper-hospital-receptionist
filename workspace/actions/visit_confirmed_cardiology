@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/visit_confirmed.png
+----
+TEXT
+<*,*,it,*>: Verificato! Oggi hai una visita al reparto di cardiologia.
+<*,*,en,*>: Verified! Today you have an examination at the department of cardiology.
+----
+TTS
+<*,*,it,*>: Verificato! Oggi hai una visita al reparto di cardiologia.
+<*,*,en,*>: Verified! Today you have an examination at the department of cardiology.
+----

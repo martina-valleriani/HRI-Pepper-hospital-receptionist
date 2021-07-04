@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/logo.png
+----
+TEXT
+<*,*,it,*>:  Sto aspettando una risposta. Riprova.
+<*,*,en,*>:  I am waiting for an answer. Try again.
+----
+TTS
+<*,*,it,*>:  Sto aspettando una risposta. Riprova.
+<*,*,en,*>:  I am waiting for an answer. Try again.
+----

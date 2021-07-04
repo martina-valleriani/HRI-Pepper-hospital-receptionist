@@ -1,0 +1,19 @@
+IMAGE
+<*,*,*,*>:  img/logo.png
+----
+TEXT
+<*,*,it,*>: Benvenuto all'ospedale del DIAG!
+<*,*,en,*>: Welcome to DIAG hospital!
+----
+GESTURE
+<*,*,*,*>: animations/Stand/Gestures/Hey_1
+----
+TTS
+<*,*,it,*>: Benvenuto all'ospedale del DIAG!
+<*,*,en,*>: Welcome to DIAG hospital!
+----
+ASR
+<*,*,it,*>: { 'start': ['inizia','avvia', 'vai avanti', 'start'] }
+<*,*,en,*>: { 'start': ['start','begin','go on']  }
+----
+

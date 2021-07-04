@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Welcome</title>
+
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="img/hospital.png">
+</head>
+
+<body>
+
+  <!-- status -->
+  <div align='right' id='status'> <font color='red'>NOT CONNECTED</font> </div>
+
+  <!-- image -->
+  <p>
+    <div align='center'> <img style="height: 400px;" id='image_default' src="img/logo.png" alt="No image"/></figure> </div>
+  </p>
+
+  <!-- text -->
+  <p>
+    <h1><div align='center' id='text_default'>DIAG Medical Center</div></h1>
+  </p>
+
+  <!-- buttons -->
+  <p>
+    <div align='center' id='buttons'>
+      <!-- input type="button" id="hello" value="Hello" onclick="hello()" -->
+    </div>
+  </p>
+
+  <!-- insert -->
+  <p>
+    <div align='center' style="visibility: hidden;" id='insert'>
+      <input type="text" id="insert_default" name="insert_default">
+    </div>
+  </p>
+
+  <script src="scripts/qaws.js"></script>
+  <script src="scripts/connection.js"></script>
+</body>
+</html>

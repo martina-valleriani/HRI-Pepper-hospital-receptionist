@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/visit_confirmed.png
+----
+TEXT
+<*,*,it,*>: Verificato! Oggi hai una visita al reparto di ortopedia.
+<*,*,en,*>: Verified! Today you have an examination at the department of orthopedics.
+----
+TTS
+<*,*,it,*>: Verificato! Oggi hai una visita al reparto di ortopedia.
+<*,*,en,*>: Verified! Today you have an examination at the department of orthopedics.
+----

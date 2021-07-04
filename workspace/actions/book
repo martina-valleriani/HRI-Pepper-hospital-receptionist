@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/search.png
+----
+TEXT
+<*,*,it,*>:  Va bene, effettuiamo una prenotazione
+<*,*,en,*>:  Ok, let's book a visit
+----
+TTS
+<*,*,it,*>: Va bene, effettuiamo una prenotazione
+<*,*,en,*>: Ok, let's book a visit 
+----

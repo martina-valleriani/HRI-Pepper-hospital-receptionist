@@ -1,0 +1,19 @@
+IMAGE
+<*,*,*,*>:  img/icon.png
+----
+TEXT
+<*,*,it,*>: Scegli il reparto
+<*,*,en,*>: Choose the department
+----
+TTS
+<*,*,it,*>: Scegli il reparto
+<*,*,en,*>: Choose the department
+----
+BUTTONS
+cardiology
+<*,*,it,*>: Cardiologia
+<*,*,en,*>: Cardiology
+orthopedics
+<*,*,it,*>: Ortopedia
+<*,*,en,*>: Orthopedics
+----

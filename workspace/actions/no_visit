@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/error.png
+----
+TEXT
+<*,*,it,*>: Spiacente, oggi non hai nessuna visita.
+<*,*,en,*>: Sorry, today you don't have any examination.
+----
+TTS
+<*,*,it,*>: Spiacente, oggi non hai nessuna visita.
+<*,*,en,*>: Sorry, today you don't have any examination.
+----
