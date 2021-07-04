@@ -1,20 +1,3 @@
-'''
-import datetime
-
-date_time_str = '1970-05-19'
-
-d = datetime.datetime.strptime(date_time_str, '%Y-%m-%d')
-
-def age(person):
-    today = datetime.date.today()
-    years = today.year - person.year
-    if today.month < person.month or (today.month == person.month and today.day < person.day):
-        years -= 1
-    return years
-
-print(age(d))
-'''
-
 import sys
 import os
 import random
@@ -44,6 +27,7 @@ def scan_QRcode():
     import random
     import io
     import csv
+    import datetime
 
     print("Stiamo dentro lo scanner!")
 
@@ -80,8 +64,7 @@ def scan_QRcode():
             reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
             lines_glob = list(reader)
             lines_glob[1][0] = str(ID)
-            writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
-            writer_glob.writerows(lines_glob)
+            born = data[2]
         else:
             print ("Paziente trovato!")
             lines[patientFound][4] = str(int(lines[patientFound][4])+1)
@@ -89,8 +72,19 @@ def scan_QRcode():
             reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
             lines_glob = list(reader)
             lines_glob[1][0] = str(patientFound)
-            writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
-            writer_glob.writerows(lines_glob)
+            born = lines[patientFound][3]
+        
+        # Compute age
+        d = datetime.datetime.strptime(born, '%Y-%m-%d')
+        today = datetime.date.today()
+        age = today.year - d.year
+        if today.month < d.month or (today.month == d.month and today.day < d.day):
+            age -= 1
+
+        lines_glob[1][3] = str(age)
+        
+        writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
+        writer_glob.writerows(lines_glob)
 
         # Sort .csv file 
         ID_list = sorted(ID_list)
@@ -181,6 +175,7 @@ def book_visit():
     reader_glob = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
     lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
+    age_patient = lines_glob[1][3]
 
     lang = lines_glob[1][2]
     if(lang == 'italiano'):
@@ -224,6 +219,7 @@ def check_examination():
     reader_glob = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
     lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
+    age_patient = lines_glob[1][3]
 
     lang = lines_glob[1][2]
     if(lang == 'italiano'):
@@ -292,7 +288,7 @@ if __name__ == "__main__":
     # Resettiamo a None le global variables
     reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
     lines_glob = list(reader)
-    lines_glob[1] = ['None', 'None', 'None']
+    lines_glob[1] = ['None', 'None', 'None', 'None']
     writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
     writer_glob.writerows(lines_glob)
 
