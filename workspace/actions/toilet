@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/toilet.png
+----
+TEXT
+<*,*,it,*>: I servizi si trovano alla fine del corridoio a destra
+<*,*,en,*>: The toilet is at the end of the hallway
+----
+TTS
+<*,*,it,*>: I servizi si trovano alla fine del corridoio a destra
+<*,*,en,*>: The toilet is at the end of the hallway
+----

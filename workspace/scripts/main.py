@@ -92,9 +92,6 @@ def scan_QRcode():
             writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
             writer_glob.writerows(lines_glob)
 
-        #writer = csv.writer(open('HRI_DB_patients.csv','w'))
-        #writer.writerows(lines)
-
         # Sort .csv file 
         ID_list = sorted(ID_list)
         lines_new = []
@@ -110,7 +107,7 @@ def scan_QRcode():
         print("QR Code not detected")
 
 
-def welcome():
+def starting_steps():
     import csv
 
     im.init()
@@ -157,26 +154,27 @@ def welcome():
         elif(a == 'info'):
             q = ('info')
             a = im.ask(q)
+
+            if (a == 'payment'):
+                q = ('payment')
+                a = im.ask(q)
+            elif (a == 'toilet'):
+                q = ('toilet')
+                a = im.ask(q)
         
-        if (a!='timeout'):
-            im.execute('wait_answer')
+        '''if (a!='timeout'):
+            im.execute('wait_answer')'''
 
         writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
         writer_glob.writerows(lines_glob)
-
-        im.init()
 
     elif(a == 'timeout'):
         q = 'wait_answer'
         im.execute(q)
 
-    im.init()
-
 def book_visit():
     import csv
     import datetime
-
-    im.init()
 
     today = datetime.date.today()
 
@@ -220,8 +218,6 @@ def book_visit():
 def check_examination():
     import csv
     import datetime
-
-    im.init()
 
     today = datetime.date.today()
 
@@ -278,7 +274,7 @@ if __name__ == "__main__":
     # remote execution
     # mws.setDemoPath('<ABSOLUTE_DEMO_PATH_ON_REMOTE_SERVER>')
 
-    mws.run_interaction(welcome)
+    mws.run_interaction(starting_steps)
 
     # Controlliamo se c'e' un'operazione da effettuare 
     # e quindi se dobbiamo scansionare un CF - qrcode

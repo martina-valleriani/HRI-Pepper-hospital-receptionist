@@ -3,9 +3,9 @@ IMAGE
 ----
 TEXT
 <*,*,it,*>: Spiacente, oggi non hai nessuna visita.
-<*,*,en,*>: Sorry, today you don't have any examination.
+<*,*,en,*>: Sorry, you don't have any examination for today.
 ----
 TTS
 <*,*,it,*>: Spiacente, oggi non hai nessuna visita.
-<*,*,en,*>: Sorry, today you don't have any examination.
+<*,*,en,*>: Sorry, you don't have any examination for today.
 ----

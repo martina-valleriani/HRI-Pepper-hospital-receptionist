@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/payment.png
+----
+TEXT
+<*,*,it,*>: Ecco il listino prezzi e le modalità di pagamento
+<*,*,en,*>: These are the price list and the payment modalities
+----
+TTS
+<*,*,it,*>: Ecco il listino prezzi e le modalità di pagamento
+<*,*,en,*>: These are the price list and the payment modalities
+----
