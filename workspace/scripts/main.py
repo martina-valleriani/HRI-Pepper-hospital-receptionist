@@ -19,7 +19,7 @@ except Exception as e:
 
 import ws_client
 from ws_client import *
-
+import qi
 
 def scan_QRcode():
     import cv2
@@ -31,7 +31,7 @@ def scan_QRcode():
 
     print("Stiamo dentro lo scanner!")
 
-    ID = random.randint(1,4)
+    ID = random.randint(1,5)
     image_name = "qrcode"+str(ID)+".png"
 
     inputImage = cv2.imread(image_name)
@@ -46,8 +46,9 @@ def scan_QRcode():
         data = data.split(", ")
 
         # prima bisogna leggere il file e vedere se gia presente
-        csvFile = csv.reader(open('HRI_DB_patients.csv'))
-        lines = list(csvFile)
+        with open('HRI_DB_patients.csv') as f:
+            csvFile = csv.reader(f)
+            lines = list(csvFile)
         patientFound = False     
         ID_list = []   
         for i in range(len(lines)):
@@ -61,18 +62,22 @@ def scan_QRcode():
             line = [str(ID),data[0],data[1],data[2],'1']
             lines.append(line)
             # Ci salviamo anche l'ID su global_vars:
-            reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-            lines_glob = list(reader)
+            with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+                reader = csv.reader(f)
+                lines_glob = list(reader)
             lines_glob[1][0] = str(ID)
             born = data[2]
+            views = 1
         else:
             print ("Paziente trovato!")
             lines[patientFound][4] = str(int(lines[patientFound][4])+1)
             # Ci salviamo anche l'ID su global_vars:
-            reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-            lines_glob = list(reader)
+            with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+                reader = csv.reader(f)
+                lines_glob = list(reader)
             lines_glob[1][0] = str(patientFound)
             born = lines[patientFound][3]
+            views = lines[patientFound][4]
         
         # Compute age
         d = datetime.datetime.strptime(born, '%Y-%m-%d')
@@ -82,9 +87,11 @@ def scan_QRcode():
             age -= 1
 
         lines_glob[1][3] = str(age)
+        lines_glob[1][4] = str(views)
         
-        writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
-        writer_glob.writerows(lines_glob)
+        with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
+            writer_glob = csv.writer(f)
+            writer_glob.writerows(lines_glob)
 
         # Sort .csv file 
         ID_list = sorted(ID_list)
@@ -95,8 +102,9 @@ def scan_QRcode():
                 if (lines[j][0] == str(elem)):
                     lines_new.append(lines[j])
         
-        writer = csv.writer(open('HRI_DB_patients.csv','w'))
-        writer.writerows(lines_new)        
+        with open('HRI_DB_patients.csv','w') as f:
+            writer = csv.writer(f)
+            writer.writerows(lines_new)  
     else:
         print("QR Code not detected")
 
@@ -117,8 +125,9 @@ def starting_steps():
         im.setProfile(['*', '*', 'en', '*'])
         lang = 'english'
 
-    reader_glob = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-    lines_glob = list(reader_glob)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader_glob = csv.reader(f)
+        lines_glob = list(reader_glob)
     lines_glob[1][2] = lang
 
     if( (a=='italiano') or (a=='english')):
@@ -155,12 +164,14 @@ def starting_steps():
             elif (a == 'toilet'):
                 q = ('toilet')
                 a = im.ask(q)
+            im.init()
         
         '''if (a!='timeout'):
             im.execute('wait_answer')'''
 
-        writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
-        writer_glob.writerows(lines_glob)
+        with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
+            writer_glob = csv.writer(f)
+            writer_glob.writerows(lines_glob)
 
     elif(a == 'timeout'):
         q = 'wait_answer'
@@ -172,8 +183,9 @@ def book_visit():
 
     today = datetime.date.today()
 
-    reader_glob = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-    lines_glob = list(reader_glob)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader_glob = csv.reader(f)
+        lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
     age_patient = lines_glob[1][3]
 
@@ -200,12 +212,15 @@ def book_visit():
         dep = 'orthopedics'
     im.ask('visit_booked')
     
-    reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv'))
-    lines = list(reader)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
+        reader = csv.reader(f)
+        lines = list(reader)
     line = [ID_patient, date.strftime("%Y-%m-%d"), dep]
     lines.append(line)
-    writer = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w'))
-    writer.writerows(lines)
+
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w') as f:    
+        writer = csv.writer(f)
+        writer.writerows(lines)
 
     im.init()
 
@@ -214,10 +229,13 @@ def check_examination():
     import csv
     import datetime
 
+    a = im.executeModality('text_default','Are your ready to order?')
+
     today = datetime.date.today()
 
-    reader_glob = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-    lines_glob = list(reader_glob)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader_glob = csv.reader(f)
+        lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
     age_patient = lines_glob[1][3]
 
@@ -227,8 +245,9 @@ def check_examination():
     elif(lang == 'english'):
         im.setProfile(['*', '*', 'en', '*'])
     
-    reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv'))
-    lines = list(reader)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
+        reader = csv.reader(f)
+        lines = list(reader)
 
     visitFound = False
 
@@ -251,17 +270,40 @@ def check_examination():
         if (j != visitFound):
             new_lines.append(lines[j])
 
-    writer = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w'))
-    writer.writerows(new_lines)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w') as f:
+        writer = csv.writer(f)
+        writer.writerows(new_lines)
 
     im.init()
 
 
 if __name__ == "__main__":
-    begin()
+    #begin()
 
     import cv2
     import csv
+
+    pip = os.getenv('PEPPER_IP')
+    pport = 9559
+    url = "tcp://" + pip + ":" + str(pport)
+
+    app = qi.Application(["App", "--qi-url=" + url ])
+    app.start()
+    session = app.session
+    memory_service=app.session.service("ALMemory")
+    tts_service = session.service("ALTextToSpeech")
+    sonarValueList = ["Device/SubDeviceList/Platform/Front/Sonar/Sensor/Value",
+                    "Device/SubDeviceList/Platform/Back/Sonar/Sensor/Value"] # sonar memory keys
+    sonarValues =  memory_service.getListData(sonarValueList)
+    sonarValues[0] = 2.0 # front
+
+    # while the distance is >= 2.0, Pepper does not see the patient
+    # when the distance is < 2.0, Pepper sees the patient
+    while (sonarValues[0] >= 2.0):
+        sonarValues =  memory_service.getListData(sonarValueList)
+        if (sonarValues[0] == 0.0):
+            sonarValues[0] = 2.0
+        patient_distance = sonarValues[0]
 
     mws = ModimWSClient()
 
@@ -274,11 +316,34 @@ if __name__ == "__main__":
 
     # Controlliamo se c'e' un'operazione da effettuare 
     # e quindi se dobbiamo scansionare un CF - qrcode
-    reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-    lines_glob = list(reader)
-    print('Global vars before: ', lines_glob)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader = csv.reader(f)
+        lines_glob = list(reader)
     if (lines_glob[1][1] == 'book' or lines_glob[1][1] == 'examination'):
         mws.run_interaction(scan_QRcode)
+    
+    # Settiamo volume e velocita' in base all'eta' del paziente
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader = csv.reader(f)
+        lines_glob = list(reader)
+    age_patient = lines_glob[1][3]
+    if (int(age_patient) > 75):
+        tts_service.setVolume(1.7)
+        tts_service.setParameter("speed", 80)
+    elif (int(age_patient) > 60):
+        tts_service.setVolume(1.2)
+        tts_service.setParameter("speed", 90)
+    
+    # RIPRENDERE DA QUI
+    # posizionare Pepper alla giusta distanza dal paziente
+    # Poi, modificare le actions in base alle views
+    views = lines_glob[1][4]
+    '''if (views >= 3):
+        # friend
+    elif (views == 2):
+        # acquaintance
+    elif (views == 1):
+        # stranger'''
     
     if (lines_glob[1][1] == 'book'):
         mws.run_interaction(book_visit)
@@ -286,10 +351,12 @@ if __name__ == "__main__":
         mws.run_interaction(check_examination)
 
     # Resettiamo a None le global variables
-    reader = csv.reader(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv'))
-    lines_glob = list(reader)
-    lines_glob[1] = ['None', 'None', 'None', 'None']
-    writer_glob = csv.writer(open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w'))
-    writer_glob.writerows(lines_glob)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader = csv.reader(f)
+        lines_glob = list(reader)
+    lines_glob[1] = ['None', 'None', 'None', 'None', 'None']
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
+        writer_glob = csv.writer(f)
+        writer_glob.writerows(lines_glob)
 
     end()
