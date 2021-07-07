@@ -2,10 +2,10 @@ IMAGE
 <*,*,*,*>:  img/error.png
 ----
 TEXT
-<*,*,it,*>: Spiacente, oggi non hai nessuna visita.
-<*,*,en,*>: Sorry, you don't have any examination for today.
+<*,*,it,*>: Spiacente, non mi risulta nessuna visita per oggi.
+<*,*,en,*>: Sorry, I don't find any examination for today.
 ----
 TTS
-<*,*,it,*>: Spiacente, oggi non hai nessuna visita.
-<*,*,en,*>: Sorry, you don't have any examination for today.
+<*,*,it,*>: Spiacente, non mi risulta nessuna visita per oggi.
+<*,*,en,*>: Sorry, I don't find any examination for today.
 ----

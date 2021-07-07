@@ -1,0 +1,23 @@
+IMAGE
+<*,*,*,*>:  img/calendar.png
+----
+TEXT
+<*,*,it,*>: Prego, selezioni la data dell'appuntamento
+<*,*,en,*>: Please, choose the date for the appointment
+----
+TTS
+<*,*,it,*>: Prego, selezioni la data dell'appuntamento
+<*,*,en,*>: Please, choose the date for the appointment
+----
+BUTTONS
+next_week
+<*,*,it,*>: Tra una settimana
+<*,*,en,*>: Next week
+next_month
+<*,*,it,*>: Tra un mese
+<*,*,en,*>: Next month
+----
+ASR
+<*,*,it,*>: { 'next_week': ['settimana','sette'],  'next_month': ['mese', 'trenta']}
+<*,*,en,*>: { 'next_week': ['week','seven'],  'next_month': ['month', 'thirty']}
+----

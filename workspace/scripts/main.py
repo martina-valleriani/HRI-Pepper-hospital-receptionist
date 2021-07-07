@@ -61,6 +61,7 @@ def scan_QRcode():
             print ("Nuovo paziente.")
             line = [str(ID),data[0],data[1],data[2],'1']
             lines.append(line)
+            ID_list.append(ID)
             # Ci salviamo anche l'ID su global_vars:
             with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
                 reader = csv.reader(f)
@@ -70,15 +71,17 @@ def scan_QRcode():
             views = 1
         else:
             print ("Paziente trovato!")
-            lines[patientFound][4] = str(int(lines[patientFound][4])+1)
+            views = str(int(lines[patientFound][4])+1)            
+            lines[patientFound][4] = views
             # Ci salviamo anche l'ID su global_vars:
             with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
                 reader = csv.reader(f)
                 lines_glob = list(reader)
             lines_glob[1][0] = str(patientFound)
             born = lines[patientFound][3]
-            views = lines[patientFound][4]
         
+        patient_distance = float(lines_glob[1][5])
+
         # Compute age
         d = datetime.datetime.strptime(born, '%Y-%m-%d')
         today = datetime.date.today()
@@ -105,6 +108,25 @@ def scan_QRcode():
         with open('HRI_DB_patients.csv','w') as f:
             writer = csv.writer(f)
             writer.writerows(lines_new)  
+
+        # Posizionare Pepper alla giusta distanza dal paziente
+        views = int(views)
+        if (views >= 3):
+            # friend
+            if (patient_distance > 0.5):
+                d = patient_distance - 0.5
+                im.robot.forward(d)
+        elif (views == 2):
+            # acquaintance
+            if (patient_distance > 0.8):
+                d = patient_distance - 0.8
+                im.robot.forward(d)
+        elif (views == 1):
+            # stranger
+            if (patient_distance > 1):
+                d = patient_distance - 1
+                im.robot.forward(d)
+        
     else:
         print("QR Code not detected")
 
@@ -188,6 +210,7 @@ def book_visit():
         lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
     age_patient = lines_glob[1][3]
+    views = int(lines_glob[1][4])
 
     lang = lines_glob[1][2]
     if(lang == 'italiano'):
@@ -195,8 +218,17 @@ def book_visit():
     elif(lang == 'english'):
         im.setProfile(['*', '*', 'en', '*'])
     
-    q = ('choose_date')
-    a1 = im.ask(q)
+    if (views >= 3):
+        im.ask('welcome_friend')
+        q = ('choose_date')
+        a1 = im.ask(q)
+    elif (views == 2):
+        q = ('choose_date')
+        a1 = im.ask(q)
+    elif (views == 1):
+        q = ('choose_date_stranger')
+        a1 = im.ask(q)
+
 
     if (a1 == 'next_week'):
         date = today + datetime.timedelta(days=7)
@@ -238,12 +270,16 @@ def check_examination():
         lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
     age_patient = lines_glob[1][3]
+    views = int(lines_glob[1][4])
 
     lang = lines_glob[1][2]
     if(lang == 'italiano'):
         im.setProfile(['*', '*', 'it', '*'])
     elif(lang == 'english'):
         im.setProfile(['*', '*', 'en', '*'])
+    
+    if (views >= 3):
+        im.ask('welcome_friend')
     
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
         reader = csv.reader(f)
@@ -261,8 +297,12 @@ def check_examination():
                 a = im.ask(q)
     
     if(visitFound == False):
-        q = ('no_visit')
-        a = im.ask(q)
+        if (views >= 3):
+            q = ('no_visit_friend')
+            a = im.ask(q)
+        elif (views >= 1):
+            q = ('no_visit')
+            a = im.ask(q)
 
     new_lines = []
     new_lines.append(lines[0])
@@ -301,10 +341,18 @@ if __name__ == "__main__":
     # when the distance is < 2.0, Pepper sees the patient
     while (sonarValues[0] >= 2.0):
         sonarValues =  memory_service.getListData(sonarValueList)
-        if (sonarValues[0] == 0.0):
+        if (sonarValues[0] == 0.0 or sonarValues[0] == None):
             sonarValues[0] = 2.0
         patient_distance = sonarValues[0]
-
+    
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader = csv.reader(f)
+        lines_glob = list(reader)
+    lines_glob[1][5] = str(patient_distance)
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
+        writer_glob = csv.writer(f)
+        writer_glob.writerows(lines_glob) 
+    
     mws = ModimWSClient()
 
     # local execution
@@ -334,16 +382,6 @@ if __name__ == "__main__":
         tts_service.setVolume(1.2)
         tts_service.setParameter("speed", 90)
     
-    # RIPRENDERE DA QUI
-    # posizionare Pepper alla giusta distanza dal paziente
-    # Poi, modificare le actions in base alle views
-    views = lines_glob[1][4]
-    '''if (views >= 3):
-        # friend
-    elif (views == 2):
-        # acquaintance
-    elif (views == 1):
-        # stranger'''
     
     if (lines_glob[1][1] == 'book'):
         mws.run_interaction(book_visit)
@@ -354,7 +392,7 @@ if __name__ == "__main__":
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
         reader = csv.reader(f)
         lines_glob = list(reader)
-    lines_glob[1] = ['None', 'None', 'None', 'None', 'None']
+    lines_glob[1] = ['None', 'None', 'None', 'None', 'None', 'None']
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
         writer_glob = csv.writer(f)
         writer_glob.writerows(lines_glob)

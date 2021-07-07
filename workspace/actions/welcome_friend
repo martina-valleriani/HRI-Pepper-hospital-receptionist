@@ -1,0 +1,14 @@
+IMAGE
+<*,*,*,*>:  img/hi.png
+----
+TEXT
+<*,*,it,*>: Bentornato! Spero vada tutto bene.
+<*,*,en,*>: Welcome back! I hope you are fine.
+----
+TTS
+<*,*,it,*>: Bentornato! Spero vada tutto bene.
+<*,*,en,*>: Welcome back! I hope you are fine.
+----
+GESTURE
+<*,*,*,*>: animations/Stand/Gestures/Hey_1
+----
