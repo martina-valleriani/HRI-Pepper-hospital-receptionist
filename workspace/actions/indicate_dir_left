@@ -1,0 +1,11 @@
+IMAGE
+<*,*,*,*>:  img/left.png
+----
+TEXT
+<*,*,it,*>: Prego, prosegui da questa parte
+<*,*,en,*>: Please, go in this direction
+----
+TTS
+<*,*,it,*>: Prego, prosegui da questa parte
+<*,*,en,*>: Please, go in this direction
+----

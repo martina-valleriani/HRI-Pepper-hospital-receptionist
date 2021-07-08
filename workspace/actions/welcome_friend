@@ -2,11 +2,11 @@ IMAGE
 <*,*,*,*>:  img/hi.png
 ----
 TEXT
-<*,*,it,*>: Bentornato! Spero vada tutto bene.
+<*,*,it,*>: Ciao! Di nuovo qui? Spero vada tutto bene.
 <*,*,en,*>: Welcome back! I hope you are fine.
 ----
 TTS
-<*,*,it,*>: Bentornato! Spero vada tutto bene.
+<*,*,it,*>: Ciao! Di nuovo qui? Spero vada tutto bene.
 <*,*,en,*>: Welcome back! I hope you are fine.
 ----
 GESTURE

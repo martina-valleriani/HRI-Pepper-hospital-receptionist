@@ -2,11 +2,11 @@ IMAGE
 <*,*,*,*>:  img/calendar.png
 ----
 TEXT
-<*,*,it,*>: Prego, selezioni la data dell'appuntamento
+<*,*,it,*>: Prego, seleziona la data dell'appuntamento
 <*,*,en,*>: Please, choose the date for the appointment
 ----
 TTS
-<*,*,it,*>: Prego, selezioni la data dell'appuntamento
+<*,*,it,*>: Prego, seleziona la data dell'appuntamento
 <*,*,en,*>: Please, choose the date for the appointment
 ----
 BUTTONS

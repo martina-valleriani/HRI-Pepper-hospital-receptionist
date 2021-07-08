@@ -139,20 +139,20 @@ def starting_steps():
 
     q = ('language')
     a = im.ask(q, timeout=3)
-    
-    if(a == 'italiano'):
-        im.setProfile(['*', '*', 'it', '*'])
-        lang = 'italiano'
-    elif(a == 'english'):
-        im.setProfile(['*', '*', 'en', '*'])
-        lang = 'english'
-
-    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
-        reader_glob = csv.reader(f)
-        lines_glob = list(reader_glob)
-    lines_glob[1][2] = lang
 
     if( (a=='italiano') or (a=='english')):
+        if(a == 'italiano'):
+            im.setProfile(['*', '*', 'it', '*'])
+            lang = 'italiano'
+        elif(a == 'english'):
+            im.setProfile(['*', '*', 'en', '*'])
+            lang = 'english'
+
+        with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+            reader_glob = csv.reader(f)
+            lines_glob = list(reader_glob)
+        lines_glob[1][2] = lang
+
         im.execute(a)
         
         q = 'menu'
@@ -186,18 +186,21 @@ def starting_steps():
             elif (a == 'toilet'):
                 q = ('toilet')
                 a = im.ask(q)
+            elif(a == 'timeout'):
+                im.execute('wait_answer')
+            im.init()
+
+        elif(a == 'timeout'):
+            im.execute('wait_answer')
             im.init()
         
-        '''if (a!='timeout'):
-            im.execute('wait_answer')'''
-
         with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
             writer_glob = csv.writer(f)
             writer_glob.writerows(lines_glob)
 
     elif(a == 'timeout'):
-        q = 'wait_answer'
-        im.execute(q)
+        im.execute('wait_answer')
+        im.init()
 
 def book_visit():
     import csv
@@ -232,27 +235,35 @@ def book_visit():
 
     if (a1 == 'next_week'):
         date = today + datetime.timedelta(days=7)
-
     elif (a1 == 'next_month'):
         date = today + datetime.timedelta(days=30)
+    elif (a1 == 'timeout'):
+        im.execute('wait_answer')
+        im.init()
     
-    q = ('choose_department')
-    a2 = im.ask(q)
-    if (a2 == 'cardiology'):
-        dep = 'cardiology'
-    elif (a2 == 'orthopedics'):
-        dep = 'orthopedics'
-    im.ask('visit_booked')
+    if (a1 != 'timeout'):
+        q = ('choose_department')
+        a2 = im.ask(q)
+        if (a2 == 'cardiology'):
+            dep = 'cardiology'
+            im.ask('visit_booked')
+        elif (a2 == 'orthopedics'):
+            dep = 'orthopedics'
+            im.ask('visit_booked')
+        elif (a2 == 'timeout'):
+            im.execute('wait_answer')
+            im.init()
     
-    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
-        reader = csv.reader(f)
-        lines = list(reader)
-    line = [ID_patient, date.strftime("%Y-%m-%d"), dep]
-    lines.append(line)
+        if (a2 != 'timeout'):
+            with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
+                reader = csv.reader(f)
+                lines = list(reader)
+            line = [ID_patient, date.strftime("%Y-%m-%d"), dep]
+            lines.append(line)
 
-    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w') as f:    
-        writer = csv.writer(f)
-        writer.writerows(lines)
+            with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv','w') as f:    
+                writer = csv.writer(f)
+                writer.writerows(lines)
 
     im.init()
 
@@ -260,8 +271,6 @@ def book_visit():
 def check_examination():
     import csv
     import datetime
-
-    a = im.executeModality('text_default','Are your ready to order?')
 
     today = datetime.date.today()
 
@@ -295,6 +304,15 @@ def check_examination():
                 
                 q = ('visit_confirmed_'+lines[i][2])
                 a = im.ask(q)
+
+                with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+                    reader_glob = csv.reader(f)
+                    lines_glob = list(reader_glob)
+                lines_glob[1][6] = lines[i][2]
+
+                with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv', 'w') as f:
+                    writer_glob = csv.writer(f)
+                    writer_glob.writerows(lines_glob)
     
     if(visitFound == False):
         if (views >= 3):
@@ -303,6 +321,8 @@ def check_examination():
         elif (views >= 1):
             q = ('no_visit')
             a = im.ask(q)
+        
+        im.init()
 
     new_lines = []
     new_lines.append(lines[0])
@@ -314,12 +334,23 @@ def check_examination():
         writer = csv.writer(f)
         writer.writerows(new_lines)
 
+def indicate_direction():
+    import csv
+
+    with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
+        reader = csv.reader(f)
+        lines_glob = list(reader)
+    
+    if (lines_glob[1][6] == 'cardiology'):
+        q = ('indicate_dir_left')
+        im.ask(q)
+    elif (lines_glob[1][6] == 'orthopedics'):
+        q = ('indicate_dir_right')
+        im.ask(q)
+
     im.init()
 
-
 if __name__ == "__main__":
-    #begin()
-
     import cv2
     import csv
 
@@ -332,6 +363,7 @@ if __name__ == "__main__":
     session = app.session
     memory_service=app.session.service("ALMemory")
     tts_service = session.service("ALTextToSpeech")
+    motion_service = session.service("ALMotion")
     sonarValueList = ["Device/SubDeviceList/Platform/Front/Sonar/Sensor/Value",
                     "Device/SubDeviceList/Platform/Back/Sonar/Sensor/Value"] # sonar memory keys
     sonarValues =  memory_service.getListData(sonarValueList)
@@ -392,7 +424,34 @@ if __name__ == "__main__":
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
         reader = csv.reader(f)
         lines_glob = list(reader)
-    lines_glob[1] = ['None', 'None', 'None', 'None', 'None', 'None']
+    if (lines_glob[1][6] != 'None'):
+        motion_service.wakeUp()
+
+        if (lines_glob[1][6] == 'cardiology'):
+            # move head and shoulder in the left direction
+            # to indicate the way to the patient
+            names  = ["HeadYaw", "LShoulderRoll"]
+            angles = [math.pi/2.0, math.pi/2.2]
+            times  = [2.0, 2.0]
+            isAbsolute = True
+            motion_service.angleInterpolation(names, angles, times, isAbsolute)
+        elif (lines_glob[1][6] == 'orthopedics'):
+            # move head and shoulder in the right direction
+            # to indicate the way to the patient
+            names  = ["HeadYaw", "RShoulderRoll"]
+            angles = [-math.pi/2.0, -math.pi/2.2]
+            times  = [2.0, 2.0]
+            isAbsolute = True
+            motion_service.angleInterpolation(names, angles, times, isAbsolute)
+
+        time.sleep(1.0)
+
+        mws.run_interaction(indicate_direction)
+
+        # Go to rest position
+        motion_service.rest()
+    
+    lines_glob[1] = ['None', 'None', 'None', 'None', 'None', 'None', 'None']
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
         writer_glob = csv.writer(f)
         writer_glob.writerows(lines_glob)
