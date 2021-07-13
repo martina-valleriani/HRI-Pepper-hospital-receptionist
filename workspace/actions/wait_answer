@@ -1,11 +1,11 @@
 IMAGE
-<*,*,*,*>:  img/logo.png
+<*,*,*,*>:  img/question.png
 ----
 TEXT
-<*,*,it,*>:  Sto aspettando una risposta. Riprova.
-<*,*,en,*>:  I am waiting for an answer. Try again.
+<*,*,it,*>:  Non sono riuscito a capire la tua scelta. Per favore, riprova utilizzando il tablet, sarà più chiaro in questo modo.
+<*,*,en,*>:  I did not understand your choice. Please, try again using the table, in this way it will be clearer.
 ----
 TTS
-<*,*,it,*>:  Sto aspettando una risposta. Riprova.
-<*,*,en,*>:  I am waiting for an answer. Try again.
+<*,*,it,*>:  Non sono riuscito a capire la tua scelta. Per favore, riprova utilizzando il tablet, sarà più chiaro in questo modo.
+<*,*,en,*>:  I did not understand your choice. Please, try again using the table, in this way it will be clearer.
 ----

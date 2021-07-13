@@ -17,3 +17,7 @@ toilet
 <*,*,it,*>: Bagno
 <*,*,en,*>: Toilet
 ----
+ASR
+<*,*,it,*>: { 'payment': ['pagamento','soldi','costo','prezzi'],  'toilet': ['toilet','bagno','wc','servizi'] }
+<*,*,en,*>: { 'payment': ['payment','money','cost','prices'],  'toilet': ['toilet','wc','services'] }
+----

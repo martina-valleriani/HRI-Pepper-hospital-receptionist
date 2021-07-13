@@ -17,3 +17,7 @@ orthopedics
 <*,*,it,*>: Ortopedia
 <*,*,en,*>: Orthopedics
 ----
+ASR
+<*,*,it,*>: { 'cardiology': ['cardiologia','cuore'],  'orthopedics': ['ortopedia', 'ossa'] }
+<*,*,en,*>: { 'cardiology': ['book','book a visit'],  'orthopedics': ['orthopedics', 'bones'] }
+----

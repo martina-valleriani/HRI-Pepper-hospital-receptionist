@@ -138,7 +138,7 @@ def starting_steps():
     a = im.ask('welcome', timeout=1)
 
     q = ('language')
-    a = im.ask(q, timeout=3)
+    a = im.ask(q, timeout=5)
 
     if( (a=='italiano') or (a=='english')):
         if(a == 'italiano'):
@@ -156,7 +156,10 @@ def starting_steps():
         im.execute(a)
         
         q = 'menu'
-        a = im.ask(q)
+        a = im.ask(q, timeout=7)
+
+        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+        print('Action a: ', a)
         
         if(a == 'book'):
             #cf_required = True
