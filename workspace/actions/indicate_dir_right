@@ -2,10 +2,10 @@ IMAGE
 <*,*,*,*>:  img/right.png
 ----
 TEXT
-<*,*,it,*>: Prego, prosegui da questa parte
-<*,*,en,*>: Please, go in this direction
+<*,*,it,*>: Prego, prosegui da questa parte. Buona giornata!
+<*,*,en,*>: Please, go in this direction. Have a nice day!
 ----
 TTS
-<*,*,it,*>: Prego, prosegui da questa parte
-<*,*,en,*>: Please, go in this direction
+<*,*,it,*>: Prego, prosegui da questa parte. Buona giornata!
+<*,*,en,*>: Please, go in this direction. Have a nice day!
 ----

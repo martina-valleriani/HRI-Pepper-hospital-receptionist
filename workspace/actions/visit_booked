@@ -2,10 +2,10 @@ IMAGE
 <*,*,*,*>:  img/visit_confirmed.png
 ----
 TEXT
-<*,*,it,*>: Appuntamento correttamente registrato.
-<*,*,en,*>: Appointment correctly saved.
+<*,*,it,*>: Appuntamento correttamente registrato. Grazie e buona giornata!
+<*,*,en,*>: Appointment correctly saved. Thank you and have a nice day!
 ----
 TTS
-<*,*,it,*>: Appuntamento correttamente registrato.
-<*,*,en,*>: Appointment correctly saved.
+<*,*,it,*>: Appuntamento correttamente registrato. Grazie e buona giornata!
+<*,*,en,*>: Appointment correctly saved. Thank you and have a nice day!
 ----

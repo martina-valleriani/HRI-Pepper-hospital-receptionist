@@ -1,9 +1,6 @@
 import sys
 import os
-import random
-import cv2
 import time
-import numpy as np
 
 sys.path.insert(0, os.getenv('PEPPER_TOOLS_HOME')+'/cmd_server')
 import pepper_cmd
@@ -23,13 +20,9 @@ import qi
 
 def scan_QRcode():
     import cv2
-    import numpy as np
     import random
-    import io
     import csv
     import datetime
-
-    print("Stiamo dentro lo scanner!")
 
     ID = random.randint(1,5)
     image_name = "qrcode"+str(ID)+".png"
@@ -158,11 +151,8 @@ def starting_steps():
         q = 'menu'
         a = im.ask(q, timeout=7)
 
-        print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
-        print('Action a: ', a)
         
         if(a == 'book'):
-            #cf_required = True
             q = ('book')
             a = im.ask(q)
             q = ('codice_fisc')
@@ -171,7 +161,6 @@ def starting_steps():
             lines_glob[1][1] = 'book'
             
         elif(a == 'examination'):
-            #cf_required = True
             q = ('examination')
             a = im.ask(q)
             q = ('codice_fisc')
@@ -215,7 +204,6 @@ def book_visit():
         reader_glob = csv.reader(f)
         lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
-    age_patient = lines_glob[1][3]
     views = int(lines_glob[1][4])
 
     lang = lines_glob[1][2]
@@ -281,7 +269,6 @@ def check_examination():
         reader_glob = csv.reader(f)
         lines_glob = list(reader_glob)
     ID_patient = lines_glob[1][0]
-    age_patient = lines_glob[1][3]
     views = int(lines_glob[1][4])
 
     lang = lines_glob[1][2]
@@ -354,7 +341,6 @@ def indicate_direction():
     im.init()
 
 if __name__ == "__main__":
-    import cv2
     import csv
 
     pip = os.getenv('PEPPER_IP')
@@ -392,13 +378,11 @@ if __name__ == "__main__":
 
     # local execution
     mws.setDemoPathAuto(__file__)
-    # remote execution
-    # mws.setDemoPath('<ABSOLUTE_DEMO_PATH_ON_REMOTE_SERVER>')
 
     mws.run_interaction(starting_steps)
 
     # Controlliamo se c'e' un'operazione da effettuare 
-    # e quindi se dobbiamo scansionare un CF - qrcode
+    # e quindi se dobbiamo scansionare un qrcode
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
         reader = csv.reader(f)
         lines_glob = list(reader)
@@ -413,9 +397,11 @@ if __name__ == "__main__":
     if (int(age_patient) > 75):
         tts_service.setVolume(1.7)
         tts_service.setParameter("speed", 80)
+        print('Volume set to 1.7 and speed to 80 because the patient is ' + str(age_patient) + ' years old.')
     elif (int(age_patient) > 60):
         tts_service.setVolume(1.2)
         tts_service.setParameter("speed", 90)
+        print('Volume set to 1.2 and speed to 90 because the patient is ' + str(age_patient) + ' years old.')
     
     
     if (lines_glob[1][1] == 'book'):
@@ -454,6 +440,7 @@ if __name__ == "__main__":
         # Go to rest position
         motion_service.rest()
     
+    # Set to None the global variables
     lines_glob[1] = ['None', 'None', 'None', 'None', 'None', 'None', 'None']
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv','w') as f:
         writer_glob = csv.writer(f)
