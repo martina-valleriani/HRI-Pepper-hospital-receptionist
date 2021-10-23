@@ -151,8 +151,7 @@ def starting_steps():
         
         q = 'menu'
         a = im.ask(q, timeout=7)
-
-        
+       
         if(a == 'book'):
             q = ('book')
             a = im.ask(q, timeout=2)
