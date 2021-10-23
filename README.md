@@ -19,7 +19,7 @@ You can watch our demo video at the following link: https://youtu.be/Y3E3rL9FcNs
     
    to install OpenCV.
 
-3. Put all the repository inside your local *playground* folder (*$HOME/playground*), except the files inside the *GUI_materials* folder.
+3. Put all the repository inside your local *playground* folder (*$HOME/playground/html*), except the files inside the *GUI_materials* folder.
    Copy the files inside the *GUI_materials* folder and paste into your local *GUI* folder (*$HOME/src/Pepper/pepper_tools/modim/src/GUI*).
 
    Notice: You can manually modify the cvs file about the appointments (*HRI_DB_appointments.csv*) in order to check if someone has a medical visit for the current date.
@@ -62,7 +62,7 @@ You can watch our demo video at the following link: https://youtu.be/Y3E3rL9FcNs
     
     `export MODIM_HOME=$HOME/src/pepper_tools/modim`
     
-    `cd playground/HRI-Pepper-hospital-receptionist/workspace/scripts`
+    `cd playground/html/HRI-Pepper-hospital-receptionist/workspace/scripts`
     
     and finally `python2 main.py` to start the application.
 
