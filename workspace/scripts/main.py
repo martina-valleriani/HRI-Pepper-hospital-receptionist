@@ -8,6 +8,7 @@ from pepper_cmd import *
 
 try:
     sys.path.insert(0, os.getenv('MODIM_HOME')+'/src/GUI')
+    sys.path.insert(0, os.getenv('MODIM_HOME')+'/src/GUI/actions')
 except Exception as e:
     print ("Please set MODIM_HOME environment variable to MODIM folder.")
     sys.exit(1)
@@ -131,7 +132,7 @@ def starting_steps():
     a = im.ask('welcome', timeout=1)
 
     q = ('language')
-    a = im.ask(q, timeout=5)
+    a = im.ask(q, timeout=10)
 
     if( (a=='italiano') or (a=='english')):
         if(a == 'italiano'):
@@ -154,17 +155,17 @@ def starting_steps():
         
         if(a == 'book'):
             q = ('book')
-            a = im.ask(q)
+            a = im.ask(q, timeout=2)
             q = ('codice_fisc')
-            a = im.ask(q)
+            a = im.ask(q, timeout=2)
             # Ci salviamo il tipo di operazione da effettuare
             lines_glob[1][1] = 'book'
             
         elif(a == 'examination'):
             q = ('examination')
-            a = im.ask(q)
+            a = im.ask(q, timeout=2)
             q = ('codice_fisc')
-            a = im.ask(q)
+            a = im.ask(q, timeout=2)
             # Ci salviamo il tipo di operazione da effettuare
             lines_glob[1][1] = 'examination'
 
@@ -213,7 +214,7 @@ def book_visit():
         im.setProfile(['*', '*', 'en', '*'])
     
     if (views >= 3):
-        im.ask('welcome_friend')
+        im.ask('welcome_friend', timeout=2)
         q = ('choose_date')
         a1 = im.ask(q)
     elif (views == 2):
@@ -234,13 +235,13 @@ def book_visit():
     
     if (a1 != 'timeout'):
         q = ('choose_department')
-        a2 = im.ask(q)
+        a2 = im.ask(q, timeout=2)
         if (a2 == 'cardiology'):
             dep = 'cardiology'
-            im.ask('visit_booked')
+            im.ask('visit_booked', timeout=2)
         elif (a2 == 'orthopedics'):
             dep = 'orthopedics'
-            im.ask('visit_booked')
+            im.ask('visit_booked', timeout=2)
         elif (a2 == 'timeout'):
             im.execute('wait_answer')
             im.init()
@@ -278,7 +279,7 @@ def check_examination():
         im.setProfile(['*', '*', 'en', '*'])
     
     if (views >= 3):
-        im.ask('welcome_friend')
+        im.ask('welcome_friend', timeout=1)
     
     with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'HRI_DB_appointments.csv') as f:
         reader = csv.reader(f)
@@ -293,7 +294,7 @@ def check_examination():
                 visitFound = i
                 
                 q = ('visit_confirmed_'+lines[i][2])
-                a = im.ask(q)
+                a = im.ask(q, timeout=2)
 
                 with open(os.getenv('MODIM_HOME')+'/src/GUI/'+'global_vars.csv') as f:
                     reader_glob = csv.reader(f)
@@ -351,6 +352,7 @@ if __name__ == "__main__":
     app.start()
     session = app.session
     memory_service=app.session.service("ALMemory")
+    posture_service=app.session.service("ALRobotPosture")
     tts_service = session.service("ALTextToSpeech")
     motion_service = session.service("ALMotion")
     sonarValueList = ["Device/SubDeviceList/Platform/Front/Sonar/Sensor/Value",
@@ -375,6 +377,7 @@ if __name__ == "__main__":
         writer_glob.writerows(lines_glob) 
     
     mws = ModimWSClient()
+    mws.cconnect()
 
     # local execution
     mws.setDemoPathAuto(__file__)
@@ -420,7 +423,7 @@ if __name__ == "__main__":
             # move head and shoulder in the left direction
             # to indicate the way to the patient
             names  = ["HeadYaw", "LShoulderRoll"]
-            angles = [math.pi/2.0, math.pi/2.2]
+            angles = [-math.pi/2.0, -math.pi/2.2]
             times  = [2.0, 2.0]
             isAbsolute = True
             motion_service.angleInterpolation(names, angles, times, isAbsolute)
@@ -428,7 +431,7 @@ if __name__ == "__main__":
             # move head and shoulder in the right direction
             # to indicate the way to the patient
             names  = ["HeadYaw", "RShoulderRoll"]
-            angles = [-math.pi/2.0, -math.pi/2.2]
+            angles = [math.pi/2.0, math.pi/2.2]
             times  = [2.0, 2.0]
             isAbsolute = True
             motion_service.angleInterpolation(names, angles, times, isAbsolute)
@@ -439,6 +442,7 @@ if __name__ == "__main__":
 
         # Go to rest position
         motion_service.rest()
+        posture_service.goToPosture("StandInit", 0.5)
     
     # Set to None the global variables
     lines_glob[1] = ['None', 'None', 'None', 'None', 'None', 'None', 'None']
